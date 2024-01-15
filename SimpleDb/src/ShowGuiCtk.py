@@ -37,6 +37,14 @@ class ShowGuiCtk(customtkinter.CTk):
         self.showTitle_entry = self.newCtkEntry()
         self.showTitle_entry.place(x=100, y=100)
 
+        # 'genre' Label and Combo Box Widgets
+        self.genre_label = self.newCtkLabel('Genre')
+        self.genre_label.place(x=20, y=160)
+        self.genre_cboxVar = StringVar()
+        self.genre_cboxOptions = ['Action', 'Comedy', 'Drama', 'Horror', 'Sci-Fi','Thriller','Fantasy','Non-Fiction','Fantasy', 'Adventure']
+        self.genre_cbox = self.newCtkComboBox(options=self.genre_cboxOptions, 
+                                    entryVariable=self.genre_cboxVar)
+        self.genre_cbox.place(x=100, y=160)
 
         # 'status' Label and Combo Box Widgets
         self.status_label = self.newCtkLabel('Status')
@@ -48,14 +56,7 @@ class ShowGuiCtk(customtkinter.CTk):
         self.status_cbox.place(x=100, y=220)
 
 
-        # 'genre' Label and Combo Box Widgets
-        self.genre_label = self.newCtkLabel('Genre')
-        self.genre_label.place(x=20, y=160)
-        self.genre_cboxVar = StringVar()
-        self.genre_cboxOptions = ['Action', 'Comedy', 'Drama', 'Horror', 'Sci-Fi','Thriller','Fantasy','Non-Fiction','Fantasy', 'Adventure']
-        self.genre_cbox = self.newCtkComboBox(options=self.genre_cboxOptions, 
-                                    entryVariable=self.genre_cboxVar)
-        self.genre_cbox.place(x=100, y=160)
+        
 
 
 
@@ -281,8 +282,8 @@ class ShowGuiCtk(customtkinter.CTk):
     def add_entry(self):
         date_id = self.date_entry.get_date()
         showTitle = self.showTitle_entry.get()
-        status = self.status_cboxVar.get()
         genre = self.genre_cboxVar.get()
+        status = self.status_cboxVar.get()    
         rating = self.rating_cboxVar.get()
         star_rating = self.star_rating_widget.get()
 
