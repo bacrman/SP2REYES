@@ -99,4 +99,6 @@ class ShowDb:
         - returns True if an entry exists for the specified 'showTitle'
         - else returns False
         """
-        return any(entry.showTitle == showTitle for entry in self.entries)
+        return any(entry.showTitle.lower() == showTitle.lower() for entry in self.entries)
+
+
