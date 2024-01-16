@@ -1,11 +1,12 @@
 '''
 This is the interface to an SQLite Database
 '''
-
+from tkinter import filedialog
+import csv
 import sqlite3
 
 class ShowDbSqlite:
-    def __init__(self, dbName='Shows.db'):
+    def __init__(self, dbName='ShowDb.db'):
         super().__init__()
         self.dbName = dbName
         self.csvFile = self.dbName.replace('.db', '.csv')
@@ -38,7 +39,6 @@ class ShowDbSqlite:
                 date TEXT PRIMARY KEY,
                 showTitle TEXT,
                 genre TEXT,
-                status TEXT,
                 status TEXT,
                 rating TEXT
                 star_rating TEXT)''')
@@ -81,3 +81,19 @@ class ShowDbSqlite:
             for entry in dbEntries:
                 print(entry)
                 filehandle.write(f"{entry[0]},{entry[1]},{entry[2]},{entry[3]},{entry[4]},{entry[5]}\n")
+    
+    
+        
+
+    def load_from_csv(self, file_path):
+        try:
+            with open(file_path, 'r') as file:
+                reader = csv.reader(file)
+                next(reader)
+                for row in reader:
+                    date_id, showTitle, genre, status, rating, star_rating = row
+                    self.insert_show(date_id, showTitle, genre, status, rating, star_rating)
+        except FileNotFoundError:
+            print(f"File '{file_path}' not found.")
+        except Exception as e:
+            print(f"Error loading data from CSV: {e}")

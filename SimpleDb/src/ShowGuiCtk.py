@@ -7,6 +7,9 @@ from ShowDbSqlite import ShowDbSqlite
 from StarRatingWidget import StarRatingWidget
 from DateInputWidget import DateInputWidget 
 from datetime import datetime
+from tkinter import filedialog
+import csv
+
 
 
 
@@ -17,7 +20,7 @@ class ShowGuiCtk(customtkinter.CTk):
         self.db = dataBase
 
         self.title('Show Rating App')
-        self.geometry('1400x450')
+        self.geometry('1400x500')
         self.config(bg='black')
         self.resizable(False, False)
 
@@ -56,10 +59,6 @@ class ShowGuiCtk(customtkinter.CTk):
         self.status_cbox.place(x=100, y=220)
 
 
-        
-
-
-
         # 'ratings' Label and Combo Box Widgets
         self.rating_label = self.newCtkLabel('Rating')
         self.rating_label.place(x=20, y=280)
@@ -81,28 +80,36 @@ class ShowGuiCtk(customtkinter.CTk):
                                 fgColor='black',
                                 hoverColor='#5b7b7a',
                                 borderColor='#5b7b7a')
-        self.add_button.place(x=100,y=400)
+        self.add_button.place(x=356,y=400)
 
         self.new_button = self.newCtkButton(text='New show',
                                 onClickHandler=lambda:self.clear_form(True))
-        self.new_button.place(x=356,y=400)
+        self.new_button.place(x=612, y=400)
 
         self.update_button = self.newCtkButton(text='Update show',
                                     onClickHandler=self.update_entry)
-        self.update_button.place(x=612,y=400)
+        self.update_button.place(x=868, y=400)
 
         self.delete_button = self.newCtkButton(text='Delete show',
                                     onClickHandler=self.delete_entry,
                                     fgColor='#E40404',
                                     hoverColor='#AE0000',
                                     borderColor='#E40404')
-        self.delete_button.place(x=868,y=400)
-
+        self.delete_button.place(x=1130, y=400)
+        ###############################################
         self.export_button = self.newCtkButton(text='Export to CSV',
                                     onClickHandler=self.export_to_csv)
-        self.export_button.place(x=1130,y=400)
+        self.export_button.place(x=1130,y=450)
 
-        
+        ##############################################
+        self.import_button = self.newCtkButton(text='Import from CSV',
+                                        onClickHandler=self.import_data_from_csv)
+        self.import_button.place(x=868, y=450)
+
+        ######################################
+        self.json_button = self.newCtkButton(text='Export to JSON',
+                                        onClickHandler=self.export_to_json)
+        self.json_button.place(x=612, y=450)
 
 
         # Tree View for Database Entries
@@ -347,3 +354,17 @@ class ShowGuiCtk(customtkinter.CTk):
         self.db.export_csv()
         messagebox.showinfo('Success', f'Data exported to {self.db.dbName}')
 
+    def import_data_from_csv(self):
+        file_path = filedialog.askopenfilename(title='Select CSV File', filetypes=[('CSV Files', '*.csv')])
+
+        if file_path:
+            try:
+                self.db.load_from_csv(file_path)
+                self.add_to_treeview()
+                messagebox.showinfo('Success', 'Data imported from CSV')
+            except Exception as e:
+                messagebox.showerror('Error', f'Error importing data: {str(e)}')
+
+    def export_to_json(self):
+        self.db.export_json()
+        messagebox.showinfo('Success', f'Data exported to {self.db.dbName.replace(".db", ".json")}')

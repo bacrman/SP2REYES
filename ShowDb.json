@@ -1,0 +1,42 @@
+[
+  {
+    "date": "2024-01-04",
+    "showTitle": "test5",
+    "genre": "Action",
+    "status": "Currently Airing",
+    "rating": "G",
+    "star_rating": "1"
+  },
+  {
+    "date": "2024-01-04",
+    "showTitle": "test6",
+    "genre": "Action",
+    "status": "Currently Airing",
+    "rating": "G",
+    "star_rating": "2"
+  },
+  {
+    "date": "2024-01-04",
+    "showTitle": "test7",
+    "genre": "Action",
+    "status": "Currently Airing",
+    "rating": "G",
+    "star_rating": "3"
+  },
+  {
+    "date": "2024-01-04",
+    "showTitle": "test8",
+    "genre": "Action",
+    "status": "Currently Airing",
+    "rating": "G",
+    "star_rating": "4"
+  },
+  {
+    "date": "2024-01-04",
+    "showTitle": "test9",
+    "genre": "Action",
+    "status": "Currently Airing",
+    "rating": "G",
+    "star_rating": "5"
+  }
+]

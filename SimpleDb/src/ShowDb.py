@@ -1,4 +1,6 @@
 from ShowDbEntry import ShowDbEntry
+import json
+
 
 class ShowDb:
     """
@@ -16,33 +18,18 @@ class ShowDb:
         self.dbName = dbName
         self.entries = []  # Using a list to store EmpDbEntry objects
         if init:
-            
-            self.entries = [ShowDbEntry('1/1/23', 'Darling in the Franxx', 'Finished Airing', 'Sci-Fi', 'R','2'),
-                            ShowDbEntry('2/1/24', 'Attack on Titan', 'Finished Airing', 'Action', 'R','2'),
-                            ShowDbEntry('3/1/25', 'Dress Up Darling', 'Finished Airing', 'Romance', 'PG-13','2')]
+            self.load_csv()
         else:
-            # Read entries from the CSV file
-            self.load_from_csv()
+            pass
         print('TODO: __init__')
 
-    def load_from_csv(self):
+    def id_exists(self, showTitle):
         """
-        Load database entries from a CSV file
+        - returns True if an entry exists for the specified 'showTitle'
+        - else returns False
         """
-        try:
-            with open(self.dbName, 'r') as file:
-                lines = file.readlines()
-                for line in lines:
-                    values = line.strip().split(',')
-                    if len(values) == 6:
-                        # Adjust the order of values for role and gender
-                        date, showTitle, genre, status, rating, star_rating = values
-                        entry = ShowDbEntry(date, showTitle, genre, status, rating, star_rating)
-                        self.entries.append(entry)
-                    else:
-                        print(f"Skipping invalid entry: {line}")
-        except FileNotFoundError:
-            print(f"File '{self.dbName}' not found. Creating an empty database.")
+        return any(entry.showTitle.lower() == showTitle.lower() for entry in self.entries)
+    
 
     def fetch_shows(self):
 
@@ -94,11 +81,43 @@ class ShowDb:
         print('TODO: export_csv')
 
 
-    def id_exists(self, showTitle):
-        """
-        - returns True if an entry exists for the specified 'showTitle'
-        - else returns False
-        """
-        return any(entry.showTitle.lower() == showTitle.lower() for entry in self.entries)
+    def export_json(self, json_filename='ShowDb.json'):
+        data = []
+
+        for entry in self.entries:
+            entry_data = {
+                'date': entry.date,
+                'showTitle': entry.showTitle,
+                'genre': entry.genre,
+                'status': entry.status,
+                'rating': entry.rating,
+                'star_rating': entry.star_rating
+            }
+            data.append(entry_data)
+
+        try:
+            with open(json_filename, 'w') as json_file:
+                json.dump(data, json_file, indent=2)
+            print(f"Database exported to {json_filename} successfully.")
+        except Exception as e:
+            print(f"Error exporting to JSON: {e}")
+
+    def load_from_csv(self, csv_filename=None):
 
 
+        
+        try:
+            self.entries = []
+            file_path = csv_filename or self.dbName
+            with open(file_path, 'r') as file:
+                lines = file.readlines()
+                for line in lines:
+                    values = line.strip().split(',')
+                    if len(values) == 6:
+                        date, showTitle, genre, status, rating, star_rating = values
+                        entry = ShowDbEntry(date, showTitle, genre, status, rating, star_rating)
+                        self.entries.append(entry)
+                    else:
+                        print(f"Skipping invalid entry: {line}")
+        except FileNotFoundError:
+            print(f"File '{self.dbName}' not found. Creating an empty database.")
