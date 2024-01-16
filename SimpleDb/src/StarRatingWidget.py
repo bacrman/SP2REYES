@@ -7,7 +7,7 @@ class StarRatingWidget(tk.Frame):
         self.rating = tk.IntVar()
 
         # Add a border and background color to the frame
-        self.config(borderwidth=2, relief="solid", background="black", padx=5, pady=5)
+        self.config(relief="solid", background="#615748", padx=5, pady=5)
 
         self.create_stars()
         self.bind("<Motion>", self.on_hover)
@@ -15,8 +15,10 @@ class StarRatingWidget(tk.Frame):
         self.bind("<Button-1>", self.on_click)
 
     def create_stars(self):
+        star_font = ('Times New Roman', 27) 
+
         for i in range(1, self.num_stars + 1):
-            star_label = tk.Label(self, fg='grey',text='\u2605', font=('Arial', 20), cursor='hand2', background="black")
+            star_label = tk.Label(self, fg='#313837', text='\u2605', font=star_font, cursor='hand2', background="#615748")
             star_label.grid(row=0, column=i-1, padx=5)
             star_label.bind("<Enter>", lambda event, rating=i: self.highlight_stars(rating))
 
@@ -37,7 +39,7 @@ class StarRatingWidget(tk.Frame):
             if i < num_stars:
                 child.config(fg='yellow')
             else:
-                child.config(fg='grey')
+                child.config(fg='#313837')
 
     def set_rating(self, rating):
         self.rating.set(rating)

@@ -7,7 +7,7 @@ class DateInputWidget(tk.Frame):
         tk.Frame.__init__(self, master)
 
         # Styling options
-        widget_Font = ('Arial', 12 , 'bold')
+        widget_Font = ('Times New Roman', 12 , 'bold')
         widget_TextColor = '#FFF'
         widget_FgColor = 'black'
         widget_BackgroundColor = '#5b7b7a'

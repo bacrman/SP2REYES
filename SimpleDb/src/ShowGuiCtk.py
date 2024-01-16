@@ -1,6 +1,8 @@
 import customtkinter
+import math
 from tkinter import *
 from tkinter import ttk
+from tkinter import font
 import tkinter as tk
 from tkinter import messagebox
 from ShowDbSqlite import ShowDbSqlite
@@ -8,7 +10,7 @@ from StarRatingWidget import StarRatingWidget
 from DateInputWidget import DateInputWidget 
 from datetime import datetime
 from tkinter import filedialog
-import csv
+
 
 
 
@@ -21,12 +23,15 @@ class ShowGuiCtk(customtkinter.CTk):
 
         self.title('Show Rating App')
         self.geometry('1400x500')
-        self.config(bg='black')
+        self.config(bg='#615748')
         self.resizable(False, False)
 
-        self.font1 = ('Arial', 20, 'bold')
-        self.font2 = ('Arial', 12, 'bold')
+        self.font1 = ('Times New Roman', 20, 'bold')
+        self.font2 = ('Times New Roman', 12, 'bold')
 
+        self.style = ttk.Style(self)
+        self.style.theme_use('clam')
+        
         # Date Entry Form
         self.date_label = self.newCtkLabel('Date')
         self.date_label.place(x=20, y=40)
@@ -73,13 +78,10 @@ class ShowGuiCtk(customtkinter.CTk):
         self.star_rating_label.place(x=20, y=340)
         self.star_rating_widget = StarRatingWidget(self, num_stars=5)
         self.star_rating_widget.grid(row=0, column=1, padx=5)
-        self.star_rating_widget.place(x=100, y=330)
+        self.star_rating_widget.place(x=80, y=323)
 
         self.add_button = self.newCtkButton(text='Add show',
-                                onClickHandler=self.add_entry,
-                                fgColor='black',
-                                hoverColor='#5b7b7a',
-                                borderColor='#5b7b7a')
+                                onClickHandler=self.add_entry)
         self.add_button.place(x=356,y=400)
 
         self.new_button = self.newCtkButton(text='New show',
@@ -119,11 +121,16 @@ class ShowGuiCtk(customtkinter.CTk):
                         font=self.font2, 
                         foreground='#fff',
                         background='#000',
-                        fieldlbackground='#313837')
-
+                        fieldbackground='#313837')
+        
         self.style.map('Treeview', background=[('selected', '#1A8F2D')])
 
-        self.tree = ttk.Treeview(self, height=15)
+        self.style.configure('Treeview.Heading', font=self.font1, background='#5b7b7a', foreground='#fff')
+        self.style.configure('Treeview', rowheight=30)
+
+        self.tree = ttk.Treeview(self, height=15, style='Treeview')
+
+
         self.tree['columns'] =  ('date', 'showTitle', 'Genre', 'Status', 'Rating','Stars')
         self.tree.column('#0', width=0, stretch=tk.NO)
         self.tree.column('date', anchor=tk.CENTER, width=10)
@@ -145,8 +152,17 @@ class ShowGuiCtk(customtkinter.CTk):
 
         self.add_to_treeview()
 
-    # new Label Widget
-        
+    def treeview_sort_column(self, tv, col, reverse):
+        l = [(tv.set(k, col), k) for k in tv.get_children('')]
+        l.sort(reverse=reverse)
+
+        # rearrange items in sorted positions
+        for index, (val, k) in enumerate(l):
+            tv.move(k, '', index)
+
+        # reverse sort next time
+        tv.heading(col, command=lambda: self.treeview_sort_column(tv, col, not reverse))
+
     def newCtkRatingScale(self, num_stars):
         widget_Font = self.font1
         widget_Length = 200
@@ -162,7 +178,7 @@ class ShowGuiCtk(customtkinter.CTk):
     def newCtkLabel(self, text = 'CTK Label'):
         widget_Font=self.font1
         widget_TextColor='#FFF'
-        widget_BgColor='black'
+        widget_BgColor='#615748'
 
         widget = customtkinter.CTkLabel(self, 
                                     text=text,
@@ -221,7 +237,7 @@ class ShowGuiCtk(customtkinter.CTk):
         return widget
 
     # new Button Widget
-    def newCtkButton(self, text = 'CTK Button', onClickHandler=None, fgColor='black', hoverColor='#201e1f', bgColor='black', borderColor='#201e1f'):
+    def newCtkButton(self, text = 'CTK Button', onClickHandler=None, fgColor='#313837', hoverColor='#5b7b7a', bgColor='#313837', borderColor='#313837'):
         widget_Font=self.font1
         widget_TextColor='#FFF'
         widget_FgColor=fgColor
@@ -230,7 +246,7 @@ class ShowGuiCtk(customtkinter.CTk):
         widget_BorderColor=borderColor
         widget_BorderWidth=2
         widget_Cursor='hand2'
-        widget_CornerRadius=15
+        widget_CornerRadius=2
         widget_Width=230
         widget_Function=onClickHandler
 
