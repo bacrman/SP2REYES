@@ -367,4 +367,4 @@ class ShowGuiCtk(customtkinter.CTk):
 
     def export_to_json(self):
         self.db.export_json()
-        messagebox.showinfo('Success', f'Data exported to {self.db.dbName.replace(".db", ".json")}')
+        messagebox.showinfo('Success', f'Data exported to json')
